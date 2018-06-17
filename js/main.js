@@ -192,7 +192,7 @@ function createNavLink(text, id, href) {
 function signOut() {
   firebase.auth().signOut().then(function () {
     console.log('Logged out.');
-    window.location.pathname = "/index.html";
+    window.location.pathname = "/dublin-bikes/";
   }).catch(function (error) {
     console.log('Error logging out:', error);
   });

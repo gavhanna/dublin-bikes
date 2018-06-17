@@ -51,6 +51,7 @@ function getData() {
         let marker = new google.maps.Marker({
           position: location.position,
           map: self.map,
+          icon: "custom-marker.png",
           label: String(location.available_bikes) +
             "/" +
             String(location.available_bike_stands),
@@ -59,14 +60,17 @@ function getData() {
         marker.addListener("click", function () {
           map.panTo(marker.getPosition());
           createInfoHTML(this.location);
+          document.getElementById('content').scrollIntoView();
         });
       });
+      removeLoadingScreen();
     });
   });
 }
 
 function createInfoHTML(data) {
-  console.log(data);
+  const okColor = "lime";
+  const warningColor = "red";
 
   const title = document.getElementById("info-title");
   const address = document.getElementById("info-address");
@@ -82,20 +86,20 @@ function createInfoHTML(data) {
 
   // Add style dynamically
   if (spaces.innerText < 3) {
-    spaces.style.color = "red"
+    spaces.style.color = warningColor
   } else {
-    spaces.style.color = "green"
+    spaces.style.color = okColor;
   }
   if (bikes.innerText < 3) {
-    bikes.style.color = "red"
+    bikes.style.color = warningColor
   } else {
-    bikes.style.color = "green"
+    bikes.style.color = okColor;
   }
 
   if (status.innerText === "OPEN") {
-    status.style.color = "green";
+    status.style.color = okColor;
   } else {
-    status.style.color = "red";
+    status.style.color = warningColor;
   }
   console.log(status.innerText);
 
@@ -125,4 +129,8 @@ function initializeStreetView(location) {
       }
     });
   map.setStreetView(panorama);
+}
+
+function removeLoadingScreen() {
+  document.getElementById("loading").remove();
 }

@@ -11,6 +11,35 @@ body {
 #map {
   height: 100%;
   width: 100%;
+  min-height: 50vh;
+}
+
+#loading {
+  background: #65bf68;
+  min-height: 100vh;
+  min-width: 100vw;
+  z-index: 1000000;
+  position: absolute;
+  color: white;
+  font-size: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.navbar,
+.navbar-dropdown {
+  background: #65bf68;
+}
+
+.navbar-item,
+.navbar-link {
+  color: white;
+}
+
+.navbar-item:hover .navbar-link {
+  color: #353535;
 }
 
 #content {
@@ -26,6 +55,12 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.card {
+  background: #209cee;
+  color: white;
+  border-radius: 3px;
 }
 
 .card-content {
@@ -50,6 +85,7 @@ body {
 
 #info-title {
   font-size: 1.3rem;
+  text-align: center;
 }
 
 .card-detail {
@@ -59,4 +95,19 @@ body {
 
 .dynamic-info {
   font-size: 1.2rem;
+}
+
+.main-info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.main-detail {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.main-detail>span:first-child {
+  font-size: 2rem;
 }

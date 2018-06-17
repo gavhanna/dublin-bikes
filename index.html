@@ -12,9 +12,9 @@
 </head>
 
 <body>
-  <nav class="navbar is-transparent">
+  <nav class="navbar">
     <div class="navbar-brand">
-      <a class="navbar-item" href="https://bulma.io">
+      <a class="navbar-item" href="#">
         <span>DUBLIN BIKES</span>
       </a>
       <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
@@ -22,6 +22,10 @@
         <span></span>
         <span></span>
       </div>
+    </div>
+
+    <div id="loading">
+      <p>Loading...</p>
     </div>
 
     <div id="navbarExampleTransparentExample" class="navbar-menu">
@@ -44,7 +48,7 @@
   </nav>
 
   <div class="container">
-    <div class="columns">
+    <div class="columns is-multiline">
       <div class="column">
         <div id="map"></div>
       </div>
@@ -52,17 +56,19 @@
         <div id="content" class="card">
           <div class="card-content" id="card-container">
             <h2 id="info-title"></h2>
+            <div class="main-info">
+              <p class="main-detail">
+                <span class="dynamic-info" id="info-bikes"></span>
+                <span>Bikes</span>
+              </p>
+              <p class="main-detail">
+                <span class="dynamic-info" id="info-spaces"></span>
+                <span>Spaces</span>
+              </p>
+            </div>
             <p class="card-detail">
               <span>Location</span>
               <span class="dynamic-info" id="info-address"></span>
-            </p>
-            <p class="card-detail">
-              <span>Bikes</span>
-              <span class="dynamic-info" id="info-bikes"></span>
-            </p>
-            <p class="card-detail">
-              <span>Spaces</span>
-              <span class="dynamic-info" id="info-spaces"></span>
             </p>
             <p class="card-detail">
               <span>Status</span>

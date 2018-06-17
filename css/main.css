@@ -128,10 +128,21 @@ body {
   cursor: pointer;
   transition: all .2s ease-in-out;
   display: none;
+  flex-direction: column;
+  justify-content: center;
 }
 
 #addToFave:hover {
   transform: scale(1.1);
+}
+
+#add-remove {
+  margin: 0 auto;
+  font-size: 2.5rem;
+  position: relative;
+  top: -4px;
+  left: -1px;
+  transform-origin: center;
 }
 
 .user-container {
@@ -148,4 +159,15 @@ body {
 
 table {
   margin: 0 auto;
+}
+
+#flash-message {
+  position: absolute;
+  top: -23px;
+  left: -93px;
+  font-size: 0.9rem;
+  color: #209cee;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  width: 150px;
 }

@@ -3,6 +3,7 @@ const apiURL =
   "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=";
 const contentDiv = document.getElementById("content");
 const faveBtn = document.getElementById("addToFave");
+const faveBtnIcon = document.getElementById("add-remove");
 let locations;
 let userFaves = [];
 let userFavesByNum = [];
@@ -174,6 +175,7 @@ firebase.auth().onAuthStateChanged(function (user) {
   } else {
     createNavLink("Sign In", "signin-btn", "login.html");
     window.location = "https://gavhanna.github.io/dublin-bikes/login.html";
+    //window.location = "/login.html"
   }
   //getData();
 });
@@ -200,7 +202,10 @@ function signOut() {
 
 function applyListenerToAddBtn() {
   faveBtn.style.background = "#65bf68";
-  faveBtn.style.display = "block";
+  faveBtn.style.display = "flex";
+  faveBtnIcon.style.left = "-1px";
+  faveBtnIcon.style.transform = "rotate(0deg)"
+
   faveBtn.addEventListener("click",
     submitFave);
 }
@@ -209,6 +214,7 @@ function submitFave() {
   const number = faveBtn.dataset.number;
   db.ref(currentUser.uid).push(number)
     .then(r => {
+      flashMessage("Added to Faves", faveBtn);
       userFaves.push({
         key: r.key,
         val: parseInt(number)
@@ -222,7 +228,9 @@ function submitFave() {
 
 function applyRemoveListenerToBtn() {
   faveBtn.style.background = "red"
-  faveBtn.style.display = "block";
+  faveBtn.style.display = "flex";
+  faveBtnIcon.style.left = "3px";
+  faveBtnIcon.style.transform = "rotate(45deg)"
   faveBtn.addEventListener("click",
     removeFave);
 }
@@ -230,6 +238,7 @@ function applyRemoveListenerToBtn() {
 function removeFave() {
   db.ref(currentUser.uid + "/" + faveBtn.dataset.dbkey).remove()
     .then(() => {
+      flashMessage("Removed from Faves", faveBtn);
       faveBtn.removeEventListener("click", removeFave);
       applyListenerToAddBtn();
       getUserFavourites();
@@ -252,5 +261,15 @@ function getUserFavourites() {
         userFaves.push(keyVal);
       });
     })
+}
 
+function flashMessage(text, element) {
+  const message = document.createElement("span");
+  message.innerText = text;
+  message.id = "flash-message";
+
+  element.appendChild(message);
+  setTimeout(() => {
+    message.remove();
+  }, 2000);
 }

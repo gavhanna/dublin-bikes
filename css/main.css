@@ -43,6 +43,11 @@ body {
   height: 200px;
 }
 
-.info-title {
+#info-title {
   font-size: 1.3rem;
+}
+
+.card-detail {
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Dublin Bikes</title>
+  <link rel="stylesheet" href="css/bulma.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+</head>
+
+<body>
+  <div class="control" style="max-width: 500px;margin: 0 auto;">
+
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control has-icons-left has-icons-right">
+        <input class="input" type="email" id="txtEmail" placeholder="Email input">
+        <span class="icon is-small is-left">
+          <i class="fas fa-envelope"></i>
+        </span>
+        <span class="icon is-small is-right">
+          <i class="fas fa-exclamation-triangle"></i>
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
+      <p class="control has-icons-left">
+        <input class="input" type="password" id="txtPassword" placeholder="Password">
+        <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
+      </p>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <button class="button is-link" id="btnLogin">Login</button>
+      </div>
+      <div class="control">
+        <button class="button is-link" id="btnSignUp">Sign Up</button>
+      </div>
+      <div class="control">
+        <button class="button is-warning is-hidden" id="btnLogout">Logout</button>
+      </div>
+    </div>
+  </div>
+  <!-- <script src="js/main.js"></script> -->
+  <script src="js/firebase.js"></script>
+</body>
+
+</html>

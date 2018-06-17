@@ -9,47 +9,53 @@
   <link rel="stylesheet" href="css/bulma.css">
   <link rel="stylesheet" href="css/main.css">
   <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+  <script>
+    const config = {
+      apiKey: "AIzaSyDGkME_v6Gk0u6wYky9OEDMoDJjI5vQvfg",
+      authDomain: "dbikes-3ddcd.firebaseapp.com",
+      databaseURL: "https://dbikes-3ddcd.firebaseio.com",
+      projectId: "dbikes-3ddcd",
+      storageBucket: "",
+      messagingSenderId: "813535336777"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script src="js/firebase.js"></script>
 </head>
 
 <body>
-  <div class="control" style="max-width: 500px;margin: 0 auto;">
-
-    <div class="field">
-      <label class="label">Email</label>
-      <div class="control has-icons-left has-icons-right">
-        <input class="input" type="email" id="txtEmail" placeholder="Email input">
-        <span class="icon is-small is-left">
-          <i class="fas fa-envelope"></i>
-        </span>
-        <span class="icon is-small is-right">
-          <i class="fas fa-exclamation-triangle"></i>
-        </span>
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="#">
+        <span>DUBLIN BIKES</span>
+      </a>
+      <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
-
-    <div class="field">
-      <p class="control has-icons-left">
-        <input class="input" type="password" id="txtPassword" placeholder="Password">
-        <span class="icon is-small is-left">
-          <i class="fas fa-lock"></i>
-        </span>
-      </p>
-    </div>
-
-    <div class="field is-grouped">
-      <div class="control">
-        <button class="button is-link" id="btnLogin">Login</button>
-      </div>
-      <div class="control">
-        <button class="button is-link" id="btnSignUp">Sign Up</button>
-      </div>
-      <div class="control">
-        <button class="button is-warning is-hidden" id="btnLogout">Logout</button>
+    <div id="navbarExampleTransparentExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="#">
+          Home
+        </a>
+        <a class="navbar-link" href="#">
+          Options
+        </a>
       </div>
     </div>
+  </nav>
+
+
+  <div class="container">
+    <div id="firebaseui-auth-container"></div>
+
   </div>
   <!-- <script src="js/main.js"></script> -->
-  <script src="js/firebase.js"></script>
+
 </body>
 
 </html>

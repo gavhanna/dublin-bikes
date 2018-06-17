@@ -9,6 +9,20 @@
   <link rel="stylesheet" href="css/bulma.css">
   <link rel="stylesheet" href="css/main.css">
   <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+  <script>
+    const config = {
+      apiKey: "AIzaSyDGkME_v6Gk0u6wYky9OEDMoDJjI5vQvfg",
+      authDomain: "dbikes-3ddcd.firebaseapp.com",
+      databaseURL: "https://dbikes-3ddcd.firebaseio.com",
+      projectId: "dbikes-3ddcd",
+      storageBucket: "",
+      messagingSenderId: "813535336777"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script src="js/firebase.js"></script>
 </head>
 
 <body>
@@ -23,22 +37,18 @@
         <span></span>
       </div>
     </div>
-
-    <div id="loading">
-      <p>Loading...</p>
-    </div>
-
     <div id="navbarExampleTransparentExample" class="navbar-menu">
       <div class="navbar-start">
-        <a class="navbar-item" href="#">
+        <a class="navbar-item" href="/">
           Home
-        </a>
-        <a class="navbar-link" href="#">
-          Options
         </a>
       </div>
     </div>
   </nav>
+
+  <div id="loading">
+    <p>Loading...</p>
+  </div>
 
   <div class="container">
     <div class="columns is-multiline">

@@ -5,6 +5,7 @@ const contentDiv = document.getElementById("content");
 let locations;
 let marker;
 const defaultLocation = 77;
+let currentUser;
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get all "navbar-burger" elements
@@ -133,4 +134,40 @@ function initializeStreetView(location) {
 
 function removeLoadingScreen() {
   document.getElementById("loading").remove();
+}
+
+
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    currentUser = user;
+    createNavLink(currentUser.displayName, "user-navlink");
+    createNavLink("Sign Out", "signout-btn");
+    document.getElementById("signout-btn")
+      .addEventListener("click", () => {
+        signOut();
+      })
+  } else {
+    console.log('No user logged in.');
+    createNavLink("Sign In", "signin-btn", "login.html");
+  }
+});
+
+function createNavLink(text, id, href) {
+  const link = document.createElement("a");
+  const navbar = document.querySelector(".navbar-start");
+
+  link.href = href;
+  link.className = "navbar-link";
+  link.id = id;
+  link.innerText = text;
+  navbar.appendChild(link);
+}
+
+function signOut() {
+  firebase.auth().signOut().then(function () {
+    console.log('Logged out.');
+    window.location.pathname = "/index.html";
+  }).catch(function (error) {
+    console.log('Error logging out:', error);
+  });
 }

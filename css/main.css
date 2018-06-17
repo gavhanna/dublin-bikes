@@ -42,6 +42,10 @@ body {
   color: #353535;
 }
 
+.navbar-menu.is-active {
+  background: #65bf68;
+}
+
 #content {
   width: 100%;
   height: 100%;

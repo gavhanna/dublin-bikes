@@ -133,3 +133,19 @@ body {
 #addToFave:hover {
   transform: scale(1.1);
 }
+
+.user-container {
+  text-align: center;
+}
+
+#username {
+  font-size: 3rem;
+}
+
+.h3 {
+  font-size: 2rem;
+}
+
+table {
+  margin: 0 auto;
+}

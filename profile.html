@@ -28,7 +28,7 @@
 <body>
   <nav class="navbar">
     <div class="navbar-brand">
-      <a class="navbar-item" href="#">
+      <a class="navbar-item" href="/">
         <span>DUBLIN BIKES</span>
       </a>
       <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
@@ -50,13 +50,21 @@
     <p>Loading...</p>
   </div>
 
-  <div class="container">
+  <div class="container user-container">
     <div class="columns is-multiline">
       <div class="column">
         <h2 id="username"></h2>
-        <p>Here is where a user will be able to view a list of saved bike stations with quick information regarding bikes and
-          spaces available.
-        </p>
+        <h3 class="h3">Saved Locations</h3>
+        <table class="table" id="table">
+          <thead>
+            <td>Street</td>
+            <td>#</td>
+            <td>Bikes</td>
+            <td>Spaces</td>
+            <td>Status</td>
+          </thead>
+          <tr id="table-row"></tr>
+        </table>
       </div>
     </div>
   </div>

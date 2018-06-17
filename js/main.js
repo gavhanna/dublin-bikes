@@ -49,7 +49,6 @@ function getData() {
       return;
     }
     response.json().then(data => {
-      console.log(data);
       locations = data;
       // Go to default location
       const defaultLoc = data.filter(el => {
@@ -112,24 +111,19 @@ function createInfoHTML(data) {
   } else {
     status.style.color = warningColor;
   }
-  console.log(status.innerText);
 
   initializeStreetView(data.position);
 
   faveBtn.setAttribute("data-number", data.number);
-  console.log(userFavesByNum, data.number);
   faveBtn.removeEventListener("click", removeFave);
   faveBtn.removeEventListener("click", submitFave);
   if (userFavesByNum.includes(data.number)) {
-    console.log("its in there");
     const obj = userFaves.filter(e => {
       return e.val === data.number;
-    })
-    console.log(obj[0]);
+    });
     faveBtn.setAttribute("data-dbKey", obj[0].key);
     applyRemoveListenerToBtn();
   } else {
-    console.log("its not saved");
     applyListenerToAddBtn();
   }
 }
@@ -178,7 +172,6 @@ firebase.auth().onAuthStateChanged(function (user) {
       getData();
     });
   } else {
-    console.log('No user logged in.');
     createNavLink("Sign In", "signin-btn", "login.html");
   }
   //getData();
@@ -254,9 +247,7 @@ function getUserFavourites() {
           key: key,
           val: parseInt(val)
         };
-        console.log(keyVal);
         userFavesByNum.push(parseInt(val));
-        console.log("its now in the array");
         userFaves.push(keyVal);
       });
     })

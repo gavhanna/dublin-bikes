@@ -80,6 +80,25 @@ function createInfoHTML(data) {
   spaces.innerText = String(data.available_bike_stands);
   status.innerText = data.status;
 
+  // Add style dynamically
+  if (spaces.innerText < 3) {
+    spaces.style.color = "red"
+  } else {
+    spaces.style.color = "green"
+  }
+  if (bikes.innerText < 3) {
+    bikes.style.color = "red"
+  } else {
+    bikes.style.color = "green"
+  }
+
+  if (status.innerText === "OPEN") {
+    status.style.color = "green";
+  } else {
+    status.style.color = "red";
+  }
+  console.log(status.innerText);
+
   initializeStreetView(data.position);
 }
 

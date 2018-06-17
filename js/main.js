@@ -173,6 +173,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     });
   } else {
     createNavLink("Sign In", "signin-btn", "login.html");
+    window.location = "https://gavhanna.github.io/dublin-bikes/login.html";
   }
   //getData();
 });

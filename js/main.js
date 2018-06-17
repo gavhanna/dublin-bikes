@@ -2,10 +2,16 @@ const apiKey = "ef653629fed566ec812f1444f8bb2b3ddc6e1bbf";
 const apiURL =
   "https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=";
 const contentDiv = document.getElementById("content");
+const faveBtn = document.getElementById("addToFave");
 let locations;
+let userFaves = [];
+let userFavesByNum = [];
 let marker;
 const defaultLocation = 77;
 let currentUser;
+const db = firebase.database();
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get all "navbar-burger" elements
@@ -29,6 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+  getUserFavourites().then(() => {
+    getData();
+  });;
 });
 
 function getData() {
@@ -79,6 +88,7 @@ function createInfoHTML(data) {
   const spaces = document.getElementById("info-spaces");
   const status = document.getElementById("info-status");
 
+
   title.innerText = data.address;
   address.innerText = data.number;
   bikes.innerText = String(data.available_bikes);
@@ -105,6 +115,23 @@ function createInfoHTML(data) {
   console.log(status.innerText);
 
   initializeStreetView(data.position);
+
+  faveBtn.setAttribute("data-number", data.number);
+  console.log(userFavesByNum, data.number);
+  faveBtn.removeEventListener("click", removeFave);
+  faveBtn.removeEventListener("click", submitFave);
+  if (userFavesByNum.includes(data.number)) {
+    console.log("its in there");
+    const obj = userFaves.filter(e => {
+      return e.val === data.number;
+    })
+    console.log(obj[0]);
+    faveBtn.setAttribute("data-dbKey", obj[0].key);
+    applyRemoveListenerToBtn();
+  } else {
+    console.log("its not saved");
+    applyListenerToAddBtn();
+  }
 }
 
 window.initMap = () => {
@@ -116,7 +143,7 @@ window.initMap = () => {
     zoom: 14,
     center: loc
   });
-  getData();
+
 };
 
 
@@ -140,16 +167,21 @@ function removeLoadingScreen() {
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     currentUser = user;
-    createNavLink(currentUser.displayName, "user-navlink");
+    createNavLink(currentUser.displayName, "user-navlink", "profile.html");
     createNavLink("Sign Out", "signout-btn");
     document.getElementById("signout-btn")
       .addEventListener("click", () => {
         signOut();
       })
+    //applyListenerToAddBtn();
+    getUserFavourites().then(() => {
+      getData();
+    });
   } else {
     console.log('No user logged in.');
     createNavLink("Sign In", "signin-btn", "login.html");
   }
+  //getData();
 });
 
 function createNavLink(text, id, href) {
@@ -170,4 +202,63 @@ function signOut() {
   }).catch(function (error) {
     console.log('Error logging out:', error);
   });
+}
+
+function applyListenerToAddBtn() {
+  faveBtn.style.background = "#65bf68";
+  faveBtn.style.display = "block";
+  faveBtn.addEventListener("click",
+    submitFave);
+}
+
+function submitFave() {
+  const number = faveBtn.dataset.number;
+  db.ref(currentUser.uid).push(number)
+    .then(r => {
+      userFaves.push({
+        key: r.key,
+        val: parseInt(number)
+      });
+      userFavesByNum.push(parseInt(number));
+      faveBtn.setAttribute("data-dbKey", r.key);
+      faveBtn.removeEventListener("click", submitFave);
+      applyRemoveListenerToBtn();
+    })
+}
+
+function applyRemoveListenerToBtn() {
+  faveBtn.style.background = "red"
+  faveBtn.style.display = "block";
+  faveBtn.addEventListener("click",
+    removeFave);
+}
+
+function removeFave() {
+  db.ref(currentUser.uid + "/" + faveBtn.dataset.dbkey).remove()
+    .then(() => {
+      faveBtn.removeEventListener("click", removeFave);
+      applyListenerToAddBtn();
+      getUserFavourites();
+    })
+};
+
+function getUserFavourites() {
+  return db.ref(currentUser.uid).once('value')
+    .then(function (snapshot) {
+      userFaves = [];
+      userFavesByNum = [];
+      snapshot.forEach(el => {
+        const key = el.key;
+        const val = el.val();
+        const keyVal = {
+          key: key,
+          val: parseInt(val)
+        };
+        console.log(keyVal);
+        userFavesByNum.push(parseInt(val));
+        console.log("its now in the array");
+        userFaves.push(keyVal);
+      });
+    })
+
 }

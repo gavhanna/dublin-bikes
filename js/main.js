@@ -4,6 +4,7 @@ const apiURL =
 const contentDiv = document.getElementById("content");
 const faveBtn = document.getElementById("addToFave");
 const faveBtnIcon = document.getElementById("add-remove");
+let markers = [];
 let locations;
 let userFaves = [];
 let userFavesByNum = [];
@@ -11,8 +12,6 @@ let marker;
 const defaultLocation = 77;
 let currentUser;
 const db = firebase.database();
-
-
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get all "navbar-burger" elements
@@ -38,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   getUserFavourites().then(() => {
     getData();
-  });;
+  });
 });
 
 function getData() {
@@ -51,27 +50,44 @@ function getData() {
     }
     response.json().then(data => {
       locations = data;
+
       // Go to default location
       const defaultLoc = data.filter(el => {
         return el.number === defaultLocation;
-      })
+      });
       createInfoHTML(defaultLoc[0]);
-
       data.forEach(location => {
-        let marker = new google.maps.Marker({
-          position: location.position,
-          map: self.map,
-          icon: "custom-marker.png",
-          label: String(location.available_bikes) +
-            "/" +
-            String(location.available_bike_stands),
-          location: location
-        });
-        marker.addListener("click", function () {
-          map.panTo(marker.getPosition());
-          createInfoHTML(this.location);
-          document.getElementById('content').scrollIntoView();
-        });
+        if (userFavesByNum.includes(location.number)) {
+          let marker = new google.maps.Marker({
+            position: location.position,
+            map: self.map,
+            icon: "custom-marker.png",
+            label: String(location.available_bikes) +
+              "/" +
+              String(location.available_bike_stands),
+            location: location
+          });
+          marker.addListener("click", function () {
+            map.panTo(marker.getPosition());
+            createInfoHTML(this.location);
+            document.getElementById("content").scrollIntoView();
+          });
+        } else {
+          let marker = new google.maps.Marker({
+            position: location.position,
+            map: self.map,
+            label: String(location.available_bikes) +
+              "/" +
+              String(location.available_bike_stands),
+            location: location
+          });
+          marker.addListener("click", function () {
+            map.panTo(marker.getPosition());
+            createInfoHTML(this.location);
+            document.getElementById("content").scrollIntoView();
+          });
+          markers.push(marker);
+        }
       });
       removeLoadingScreen();
     });
@@ -88,7 +104,6 @@ function createInfoHTML(data) {
   const spaces = document.getElementById("info-spaces");
   const status = document.getElementById("info-status");
 
-
   title.innerText = data.address;
   address.innerText = data.number;
   bikes.innerText = String(data.available_bikes);
@@ -97,12 +112,12 @@ function createInfoHTML(data) {
 
   // Add style dynamically
   if (spaces.innerText < 3) {
-    spaces.style.color = warningColor
+    spaces.style.color = warningColor;
   } else {
     spaces.style.color = okColor;
   }
   if (bikes.innerText < 3) {
-    bikes.style.color = warningColor
+    bikes.style.color = warningColor;
   } else {
     bikes.style.color = okColor;
   }
@@ -135,22 +150,21 @@ window.initMap = () => {
     lng: -6.265125
   };
   self.map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 14,
+    zoom: 16,
     center: loc
   });
-
 };
-
 
 function initializeStreetView(location) {
   var panorama = new google.maps.StreetViewPanorama(
-    document.getElementById('streetViewMap'), {
+    document.getElementById("streetViewMap"), {
       position: location,
       pov: {
         heading: 34,
         pitch: 0
       }
-    });
+    }
+  );
   map.setStreetView(panorama);
 }
 
@@ -158,16 +172,14 @@ function removeLoadingScreen() {
   document.getElementById("loading").remove();
 }
 
-
 firebase.auth().onAuthStateChanged(function (user) {
   if (user) {
     currentUser = user;
-    createNavLink(currentUser.displayName, "user-navlink", "profile.html");
+    createNavLink("Saved Locations", "user-navlink", "profile.html");
     createNavLink("Sign Out", "signout-btn");
-    document.getElementById("signout-btn")
-      .addEventListener("click", () => {
-        signOut();
-      })
+    document.getElementById("signout-btn").addEventListener("click", () => {
+      signOut();
+    });
     //applyListenerToAddBtn();
     getUserFavourites().then(() => {
       getData();
@@ -185,34 +197,49 @@ function createNavLink(text, id, href) {
   const navbar = document.querySelector(".navbar-start");
 
   link.href = href;
-  link.className = "navbar-link";
+  link.className = "navbar-item";
   link.id = id;
   link.innerText = text;
   navbar.appendChild(link);
 }
 
 function signOut() {
-  firebase.auth().signOut().then(function () {
-    console.log('Logged out.');
-    window.location.pathname = "/dublin-bikes/";
-  }).catch(function (error) {
-    console.log('Error logging out:', error);
-  });
+  firebase
+    .auth()
+    .signOut()
+    .then(function () {
+      console.log("Logged out.");
+      window.location.pathname = "/dublin-bikes/";
+    })
+    .catch(function (error) {
+      console.log("Error logging out:", error);
+    });
 }
 
 function applyListenerToAddBtn() {
-  faveBtn.style.background = "#65bf68";
+  // faveBtn.style.background = "#65bf68";
   faveBtn.style.display = "flex";
-  faveBtnIcon.style.left = "-1px";
-  faveBtnIcon.style.transform = "rotate(0deg)"
+  faveBtn.style.color = "white";
+  // faveBtnIcon.style.left = "-1px";
+  // faveBtnIcon.style.transform = "rotate(0deg)";
 
-  faveBtn.addEventListener("click",
-    submitFave);
+  faveBtn.addEventListener("click", submitFave);
+}
+
+function applyRemoveListenerToBtn() {
+  // faveBtn.style.background = "red";
+  faveBtn.style.display = "flex";
+  faveBtn.style.color = "gold";
+
+  // faveBtnIcon.style.left = "3px";
+  // faveBtnIcon.style.transform = "rotate(45deg)";
+  faveBtn.addEventListener("click", removeFave);
 }
 
 function submitFave() {
   const number = faveBtn.dataset.number;
-  db.ref(currentUser.uid).push(number)
+  db.ref(currentUser.uid)
+    .push(number)
     .then(r => {
       flashMessage("Added to Faves", faveBtn);
       userFaves.push({
@@ -223,30 +250,27 @@ function submitFave() {
       faveBtn.setAttribute("data-dbKey", r.key);
       faveBtn.removeEventListener("click", submitFave);
       applyRemoveListenerToBtn();
-    })
+      getData();
+    });
 }
 
-function applyRemoveListenerToBtn() {
-  faveBtn.style.background = "red"
-  faveBtn.style.display = "flex";
-  faveBtnIcon.style.left = "3px";
-  faveBtnIcon.style.transform = "rotate(45deg)"
-  faveBtn.addEventListener("click",
-    removeFave);
-}
 
 function removeFave() {
-  db.ref(currentUser.uid + "/" + faveBtn.dataset.dbkey).remove()
+  db.ref(currentUser.uid + "/" + faveBtn.dataset.dbkey)
+    .remove()
     .then(() => {
       flashMessage("Removed from Faves", faveBtn);
       faveBtn.removeEventListener("click", removeFave);
       applyListenerToAddBtn();
       getUserFavourites();
-    })
-};
+      getData();
+    });
+}
 
 function getUserFavourites() {
-  return db.ref(currentUser.uid).once('value')
+  return db
+    .ref(currentUser.uid)
+    .once("value")
     .then(function (snapshot) {
       userFaves = [];
       userFavesByNum = [];
@@ -260,7 +284,7 @@ function getUserFavourites() {
         userFavesByNum.push(parseInt(val));
         userFaves.push(keyVal);
       });
-    })
+    });
 }
 
 function flashMessage(text, element) {
@@ -272,4 +296,8 @@ function flashMessage(text, element) {
   setTimeout(() => {
     message.remove();
   }, 2000);
+}
+
+function clearMarkers() {
+  setMapOnAll(null);
 }

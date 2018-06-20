@@ -120,7 +120,7 @@ body {
 #addToFave {
   width: 30px;
   height: 30px;
-  background: #65bf68;
+  /* background: #65bf68; */
   position: absolute;
   top: 25px;
   right: 10%;
@@ -136,13 +136,8 @@ body {
   transform: scale(1.1);
 }
 
-#add-remove {
+.fa-star {
   margin: 0 auto;
-  font-size: 2.5rem;
-  position: relative;
-  top: -4px;
-  left: -1px;
-  transform-origin: center;
 }
 
 .user-container {
